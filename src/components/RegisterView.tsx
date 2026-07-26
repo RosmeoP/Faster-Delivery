@@ -21,7 +21,7 @@ export default function RegisterView({ onNavigateToLogin }: RegisterViewProps) {
         <div className="max-w-[1200px] mx-auto px-8 py-4 flex justify-between items-center">
           <div className="flex items-center gap-10">
             <div className="text-[17px] font-semibold text-gray-800 tracking-tight cursor-pointer">
-              Rosmeo
+              Faster Delivery
             </div>
             <nav className="flex items-center gap-7">
               <a href="#explorar" className="text-[15px] font-medium text-gray-600 hover:text-gray-900 transition-colors">
