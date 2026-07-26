@@ -100,7 +100,7 @@ export default function RegisterView({ onNavigateToLogin }: RegisterViewProps) {
               <input
                 id="password"
                 type="password"
-                placeholder="Digita tu contrasenia"
+                placeholder="Digita tu contraseña"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full h-12 px-4 border border-gray-200 rounded-xl text-[14px] text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all"
