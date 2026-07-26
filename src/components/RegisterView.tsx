@@ -8,32 +8,36 @@ export default function RegisterView({ onNavigateToLogin }: RegisterViewProps) {
   const [nombre, setNombre] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [direccion, setDireccion] = useState('')
 
   const handleRegisterSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Registro enviado:', { nombre, email, password })
+    console.log('Registro enviado:', { nombre, email, password, direccion })
   }
 
   return (
     <div className="flex flex-col min-h-screen bg-white font-sans antialiased text-gray-900">
-      {/* Rosmeo Top Bar */}
-      <header className="w-full border-b border-gray-100 bg-white">
-        <div className="max-w-[1200px] mx-auto px-8 py-4 flex justify-between items-center">
+      {/* Header Bar */}
+      <header className="w-full bg-white py-6 px-8 sm:px-12">
+        <div className="max-w-[1300px] mx-auto flex justify-between items-center">
           <div className="flex items-center gap-10">
-            <div className="text-[17px] font-semibold text-gray-800 tracking-tight cursor-pointer">
-              Faster Delivery
+            <div 
+              className="text-[19px] font-bold text-black tracking-tight cursor-pointer select-none"
+              onClick={onNavigateToLogin}
+            >
+              Rosmeo
             </div>
-            <nav className="flex items-center gap-7">
-              <a href="#explorar" className="text-[15px] font-medium text-gray-600 hover:text-gray-900 transition-colors">
+            <nav className="hidden md:flex items-center gap-8">
+              <a href="#explorar" className="text-[15px] font-medium text-gray-700 hover:text-black transition-colors">
                 Explorar
               </a>
-              <a href="#ofertas" className="text-[15px] font-medium text-gray-600 hover:text-gray-900 transition-colors">
+              <a href="#ofertas" className="text-[15px] font-medium text-gray-700 hover:text-black transition-colors">
                 Ofertas
               </a>
-              <a href="#historia" className="text-[15px] font-medium text-gray-600 hover:text-gray-900 transition-colors">
+              <a href="#historia" className="text-[15px] font-medium text-gray-700 hover:text-black transition-colors">
                 Historia
               </a>
-              <a href="#ayuda" className="text-[15px] font-medium text-gray-600 hover:text-gray-900 transition-colors">
+              <a href="#ayuda" className="text-[15px] font-medium text-gray-700 hover:text-black transition-colors">
                 Ayuda
               </a>
             </nav>
@@ -41,26 +45,26 @@ export default function RegisterView({ onNavigateToLogin }: RegisterViewProps) {
 
           <button
             onClick={onNavigateToLogin}
-            className="bg-[#5b3bf4] hover:bg-[#4c2ee3] text-white px-6 py-2.5 rounded-xl text-[14px] font-semibold shadow-sm transition-all duration-150 active:scale-[0.98] cursor-pointer"
+            className="bg-[#5037ed] hover:bg-[#432bd8] text-white px-6 py-2.5 rounded-xl text-[14px] font-semibold transition-all cursor-pointer shadow-sm"
           >
             Loguearse
           </button>
         </div>
       </header>
 
-      {/* Register Form Main Container */}
-      <main className="flex-1 flex justify-center items-center px-4 py-12">
-        <div className="w-full max-w-[460px] bg-white rounded-2xl border border-gray-800/80 p-8 sm:p-10 shadow-[0_10px_30px_rgba(0,0,0,0.06)]">
-          <h1 className="text-[32px] font-black text-gray-900 tracking-tight leading-tight mb-2">
+      {/* Register Main Container */}
+      <main className="flex-1 flex justify-center items-center px-4 py-8">
+        <div className="w-full max-w-[470px] bg-white rounded-[22px] border border-gray-400/80 p-8 sm:p-10 shadow-[0_12px_32px_rgba(0,0,0,0.06)]">
+          <h1 className="text-[30px] font-black text-black tracking-tight leading-tight mb-1.5">
             Crear una cuenta
           </h1>
-          <p className="text-[15px] text-gray-600 font-medium mb-8">
+          <p className="text-[14px] text-gray-700 font-medium mb-7">
             Crea tu cuenta y disfruta de las promociones recientes
           </p>
 
-          <form onSubmit={handleRegisterSubmit} className="flex flex-col gap-5">
+          <form onSubmit={handleRegisterSubmit} className="flex flex-col gap-4">
             <div>
-              <label htmlFor="nombre" className="block text-[11px] font-extrabold text-gray-900 tracking-wider mb-2 uppercase">
+              <label htmlFor="nombre" className="block text-[11px] font-black text-gray-900 tracking-wider mb-2 uppercase">
                 NOMBRE COMPLETO
               </label>
               <input
@@ -69,13 +73,13 @@ export default function RegisterView({ onNavigateToLogin }: RegisterViewProps) {
                 placeholder="Registra tu nombre"
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
-                className="w-full h-12 px-4 border border-gray-200 rounded-lg text-[15px] placeholder-gray-400 text-gray-900 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all"
+                className="w-full h-12 px-4 border border-gray-200 rounded-xl text-[14px] text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all"
                 required
               />
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-[11px] font-extrabold text-gray-900 tracking-wider mb-2 uppercase">
+              <label htmlFor="email" className="block text-[11px] font-black text-gray-900 tracking-wider mb-2 uppercase">
                 DIRECCION DE CORREO ELECTRONICO
               </label>
               <input
@@ -84,13 +88,13 @@ export default function RegisterView({ onNavigateToLogin }: RegisterViewProps) {
                 placeholder="example@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full h-12 px-4 border border-gray-200 rounded-lg text-[15px] placeholder-gray-400 text-gray-900 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all"
+                className="w-full h-12 px-4 border border-gray-200 rounded-xl text-[14px] text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all"
                 required
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-[11px] font-extrabold text-gray-900 tracking-wider mb-2 uppercase">
+              <label htmlFor="password" className="block text-[11px] font-black text-gray-900 tracking-wider mb-2 uppercase">
                 CONTRASENIA
               </label>
               <input
@@ -99,28 +103,33 @@ export default function RegisterView({ onNavigateToLogin }: RegisterViewProps) {
                 placeholder="Digita tu contrasenia"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-12 px-4 border border-gray-200 rounded-lg text-[15px] placeholder-gray-400 text-gray-900 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all"
+                className="w-full h-12 px-4 border border-gray-200 rounded-xl text-[14px] text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all"
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="direccion" className="block text-[11px] font-black text-gray-900 tracking-wider mb-2 uppercase">
+                DIRECCION DE ENVIO PRINCIPAL
+              </label>
+              <input
+                id="direccion"
+                type="text"
+                placeholder="Ciudad, Provincia, Urbanizacion"
+                value={direccion}
+                onChange={(e) => setDireccion(e.target.value)}
+                className="w-full h-12 px-4 border border-gray-200 rounded-xl text-[14px] text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all"
                 required
               />
             </div>
 
             <button
               type="submit"
-              className="w-full h-12 mt-3 bg-[#1d3bbd] hover:bg-[#1932a3] text-white font-semibold rounded-lg text-[15px] transition-all duration-150 active:scale-[0.99] cursor-pointer shadow-sm flex items-center justify-center"
+              className="w-full h-12 mt-3 bg-[#1d3bbd] hover:bg-[#17309e] text-white font-semibold rounded-xl text-[15px] shadow-sm transition-all duration-150 active:scale-[0.99] cursor-pointer flex items-center justify-center"
             >
               Crear cuenta
             </button>
           </form>
-
-          <div className="mt-6 text-center">
-            <button
-              type="button"
-              onClick={onNavigateToLogin}
-              className="text-[14px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
-            >
-              ¿Ya tienes cuenta? <span className="text-blue-700 font-semibold underline">Iniciar sesión</span>
-            </button>
-          </div>
         </div>
       </main>
     </div>

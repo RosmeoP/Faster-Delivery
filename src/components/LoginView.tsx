@@ -20,7 +20,7 @@ export default function LoginView({ onNavigateToRegister }: LoginViewProps) {
       <header className="w-full bg-white py-6 px-8 sm:px-12">
         <div className="max-w-[1300px] mx-auto flex justify-between items-center">
           <div className="flex items-center gap-10">
-            <div 
+            <div
               className="text-[19px] font-bold text-black tracking-tight cursor-pointer select-none"
               onClick={onNavigateToRegister}
             >
@@ -57,7 +57,7 @@ export default function LoginView({ onNavigateToRegister }: LoginViewProps) {
           <h1 className="text-[34px] font-extrabold text-black tracking-tight mb-1 text-center">
             Bienvenido
           </h1>
-          
+
           <button
             type="button"
             onClick={onNavigateToRegister}
