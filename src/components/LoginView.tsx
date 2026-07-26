@@ -81,7 +81,7 @@ export default function LoginView({ onNavigateToRegister }: LoginViewProps) {
             <div className="w-full">
               <input
                 type="password"
-                placeholder="Contrasenia"
+                placeholder="Contraseña"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full h-[48px] px-4 border border-gray-300 rounded-xl text-[15px] text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all"
@@ -103,7 +103,7 @@ export default function LoginView({ onNavigateToRegister }: LoginViewProps) {
                 href="#olvide-contrasenia"
                 className="text-[14px] font-bold text-[#1d4ed8] hover:text-blue-800 transition-colors"
               >
-                Olvide la contrasenia
+                Olvide la contraseña
               </a>
             </div>
 
