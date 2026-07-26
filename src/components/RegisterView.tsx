@@ -95,7 +95,7 @@ export default function RegisterView({ onNavigateToLogin }: RegisterViewProps) {
 
             <div>
               <label htmlFor="password" className="block text-[11px] font-black text-gray-900 tracking-wider mb-2 uppercase">
-                CONTRASENIA
+                CONTRASEÑA
               </label>
               <input
                 id="password"
