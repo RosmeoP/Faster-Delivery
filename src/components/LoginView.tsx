@@ -1,17 +1,32 @@
 import { useState } from 'react'
+import { useAuth } from '../hooks/useAuth'
+import { loginService } from '../services/loginService'
 
 interface LoginViewProps {
   onNavigateToRegister: () => void
 }
 
 export default function LoginView({ onNavigateToRegister }: LoginViewProps) {
+  const { login } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [rememberMe, setRememberMe] = useState(false)
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Login enviado:', { email, password, rememberMe })
+    setIsLoading(true)
+    setError('')
+
+    try {
+      const response = await loginService({ correo: email, contrasena: password })
+      login(response)
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : 'No fue posible iniciar sesión.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -109,10 +124,12 @@ export default function LoginView({ onNavigateToRegister }: LoginViewProps) {
 
             <button
               type="submit"
+              disabled={isLoading}
               className="w-full h-[48px] bg-[#1d3bbd] hover:bg-[#17309e] text-white rounded-xl text-[15px] font-semibold active:scale-[0.99] transition-all cursor-pointer shadow-sm"
             >
-              Loguearse
+              {isLoading ? 'Iniciando sesión...' : 'Loguearse'}
             </button>
+            {error && <p role="alert" className="text-center text-sm font-medium text-red-700">{error}</p>}
           </form>
         </div>
       </main>

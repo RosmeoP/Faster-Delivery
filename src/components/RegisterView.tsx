@@ -1,133 +1,69 @@
-import { useState } from 'react'
+import { useRegisterViewModel } from '../hooks/useRegisterViewModel'
 
 interface RegisterViewProps {
   onNavigateToLogin: () => void
 }
 
-export default function RegisterView({ onNavigateToLogin }: RegisterViewProps) {
-  const [nombre, setNombre] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [direccion, setDireccion] = useState('')
+const fields = [
+  { name: 'nombre', label: 'Nombre', type: 'text', placeholder: 'Ingresa tu nombre' },
+  { name: 'apellido', label: 'Apellido', type: 'text', placeholder: 'Ingresa tu apellido' },
+  { name: 'telefono', label: 'Teléfono', type: 'tel', placeholder: 'Ingresa tu teléfono' },
+  { name: 'correo', label: 'Correo electrónico', type: 'email', placeholder: 'example@gmail.com' },
+  { name: 'contrasena', label: 'Contraseña', type: 'password', placeholder: 'Crea una contraseña' },
+  { name: 'confirmarContrasena', label: 'Confirmar contraseña', type: 'password', placeholder: 'Confirma tu contraseña' },
+] as const
 
-  const handleRegisterSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log('Registro enviado:', { nombre, email, password, direccion })
-  }
+export default function RegisterView({ onNavigateToLogin }: RegisterViewProps) {
+  const { form, error, isLoading, handleChange, handleSubmit } = useRegisterViewModel()
 
   return (
-    <div className="flex flex-col min-h-screen bg-white font-sans antialiased text-gray-900">
-      {/* Header Bar */}
-      <header className="w-full bg-white py-6 px-8 sm:px-12">
-        <div className="max-w-[1300px] mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-10">
-            <div 
-              className="text-[19px] font-bold text-black tracking-tight cursor-pointer select-none"
-              onClick={onNavigateToLogin}
-            >
-              Rosmeo
-            </div>
-            <nav className="hidden md:flex items-center gap-8">
-              <a href="#explorar" className="text-[15px] font-medium text-gray-700 hover:text-black transition-colors">
-                Explorar
-              </a>
-              <a href="#ofertas" className="text-[15px] font-medium text-gray-700 hover:text-black transition-colors">
-                Ofertas
-              </a>
-              <a href="#historia" className="text-[15px] font-medium text-gray-700 hover:text-black transition-colors">
-                Historia
-              </a>
-              <a href="#ayuda" className="text-[15px] font-medium text-gray-700 hover:text-black transition-colors">
-                Ayuda
-              </a>
-            </nav>
-          </div>
-
+    <div className="flex min-h-screen flex-col bg-white font-sans text-gray-900 antialiased">
+      <header className="w-full bg-white px-8 py-6 sm:px-12">
+        <div className="mx-auto flex max-w-[1300px] items-center justify-between">
+          <button type="button" onClick={onNavigateToLogin} className="text-[19px] font-bold tracking-tight">
+            Faster Delivery
+          </button>
           <button
+            type="button"
             onClick={onNavigateToLogin}
-            className="bg-[#5037ed] hover:bg-[#432bd8] text-white px-6 py-2.5 rounded-xl text-[14px] font-semibold transition-all cursor-pointer shadow-sm"
+            className="rounded-xl bg-[#5037ed] px-6 py-2.5 text-[14px] font-semibold text-white shadow-sm transition-colors hover:bg-[#432bd8]"
           >
             Loguearse
           </button>
         </div>
       </header>
 
-      {/* Register Main Container */}
-      <main className="flex-1 flex justify-center items-center px-4 py-8">
-        <div className="w-full max-w-[470px] bg-white rounded-[22px] border border-gray-400/80 p-8 sm:p-10 shadow-[0_12px_32px_rgba(0,0,0,0.06)]">
-          <h1 className="text-[30px] font-black text-black tracking-tight leading-tight mb-1.5">
-            Crear una cuenta
-          </h1>
-          <p className="text-[14px] text-gray-700 font-medium mb-7">
-            Crea tu cuenta y disfruta de las promociones recientes
-          </p>
+      <main className="flex flex-1 justify-center px-4 py-8">
+        <div className="w-full max-w-[470px] rounded-[22px] border border-gray-300 bg-white p-8 shadow-[0_12px_32px_rgba(0,0,0,0.06)] sm:p-10">
+          <h1 className="mb-1.5 text-[30px] font-black leading-tight tracking-tight">Crear una cuenta</h1>
+          <p className="mb-7 text-[14px] font-medium text-gray-700">Completa tus datos para registrarte.</p>
 
-          <form onSubmit={handleRegisterSubmit} className="flex flex-col gap-4">
-            <div>
-              <label htmlFor="nombre" className="block text-[11px] font-black text-gray-900 tracking-wider mb-2 uppercase">
-                NOMBRE COMPLETO
-              </label>
-              <input
-                id="nombre"
-                type="text"
-                placeholder="Registra tu nombre"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                className="w-full h-12 px-4 border border-gray-200 rounded-xl text-[14px] text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all"
-                required
-              />
-            </div>
+          <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-4">
+            {fields.map((field) => (
+              <div key={field.name}>
+                <label htmlFor={field.name} className="mb-2 block text-[11px] font-black uppercase tracking-wider text-gray-900">
+                  {field.label}
+                </label>
+                <input
+                  id={field.name}
+                  name={field.name}
+                  type={field.type}
+                  placeholder={field.placeholder}
+                  value={form[field.name]}
+                  onChange={handleChange}
+                  className="h-12 w-full rounded-xl border border-gray-200 px-4 text-[14px] text-gray-900 placeholder-gray-400 transition-all focus:border-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#2563eb]/20"
+                />
+              </div>
+            ))}
 
-            <div>
-              <label htmlFor="email" className="block text-[11px] font-black text-gray-900 tracking-wider mb-2 uppercase">
-                DIRECCION DE CORREO ELECTRONICO
-              </label>
-              <input
-                id="email"
-                type="email"
-                placeholder="example@gmail.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full h-12 px-4 border border-gray-200 rounded-xl text-[14px] text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all"
-                required
-              />
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-[11px] font-black text-gray-900 tracking-wider mb-2 uppercase">
-                CONTRASEÑA
-              </label>
-              <input
-                id="password"
-                type="password"
-                placeholder="Digita tu contraseña"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-12 px-4 border border-gray-200 rounded-xl text-[14px] text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all"
-                required
-              />
-            </div>
-
-            <div>
-              <label htmlFor="direccion" className="block text-[11px] font-black text-gray-900 tracking-wider mb-2 uppercase">
-                DIRECCION DE ENVIO PRINCIPAL
-              </label>
-              <input
-                id="direccion"
-                type="text"
-                placeholder="Ciudad, Provincia, Urbanizacion"
-                value={direccion}
-                onChange={(e) => setDireccion(e.target.value)}
-                className="w-full h-12 px-4 border border-gray-200 rounded-xl text-[14px] text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all"
-                required
-              />
-            </div>
+            {error && <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm font-medium text-red-700">{error}</p>}
 
             <button
               type="submit"
-              className="w-full h-12 mt-3 bg-[#1d3bbd] hover:bg-[#17309e] text-white font-semibold rounded-xl text-[15px] shadow-sm transition-all duration-150 active:scale-[0.99] cursor-pointer flex items-center justify-center"
+              disabled={isLoading}
+              className="mt-3 flex h-12 w-full items-center justify-center rounded-xl bg-[#1d3bbd] text-[15px] font-semibold text-white shadow-sm transition-all hover:bg-[#17309e] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Crear cuenta
+              {isLoading ? 'Creando cuenta...' : 'Crear cuenta'}
             </button>
           </form>
         </div>
