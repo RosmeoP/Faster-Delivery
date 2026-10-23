@@ -5,30 +5,32 @@ import {
   Barcode,
   CheckCircle2,
   DollarSign,
+  Loader2,
   Package,
   Tag,
 } from 'lucide-react'
 import { useProducts } from '../context/ProductsContext'
 import { useProductFormViewModel } from '../viewmodels/useProductFormViewModel'
 
-const CATEGORIES = [
-  'Fast Food',
-  'Healthy',
-  'Desserts',
-  'Beverages',
-  'Calzado Urbano',
-  'Comida',
-  'Ropa urbana',
-]
-
 export const ProductForm: FC = () => {
   const navigate = useNavigate()
   const { addProduct } = useProducts()
-  const { form, errors, descriptionMax, handleChange, reset, handleSubmit } =
-    useProductFormViewModel((draft) => {
-      addProduct(draft)
-      navigate('/')
-    })
+  const {
+    form,
+    errors,
+    categories,
+    categoriesLoading,
+    categoriesError,
+    submitting,
+    submitError,
+    descriptionMax,
+    handleChange,
+    reset,
+    handleSubmit,
+  } = useProductFormViewModel((created) => {
+    addProduct(created)
+    navigate('/')
+  })
 
   const descLen = form.description.length
 
@@ -107,27 +109,34 @@ export const ProductForm: FC = () => {
                 </span>
                 <select
                   id="product-category"
-                  name="category"
-                  value={form.category}
+                  name="categoryId"
+                  value={form.categoryId}
                   onChange={handleChange}
-                  className={`w-full appearance-none rounded-xl border py-2.5 pr-4 pl-9 text-sm text-slate-800 focus:outline-none focus:ring-2 transition-colors ${
-                    errors.category
+                  disabled={categoriesLoading || !!categoriesError}
+                  className={`w-full appearance-none rounded-xl border py-2.5 pr-4 pl-9 text-sm text-slate-800 focus:outline-none focus:ring-2 transition-colors disabled:cursor-not-allowed disabled:bg-slate-50 ${
+                    errors.categoryId
                       ? 'border-red-300 focus:border-red-400 focus:ring-red-100'
                       : 'border-slate-200 focus:border-violet-400 focus:ring-violet-100'
-                  } ${form.category === '' ? 'text-slate-400' : 'text-slate-800'}`}
+                  } ${form.categoryId === '' ? 'text-slate-400' : 'text-slate-800'}`}
                 >
                   <option value="" disabled>
-                    Selecciona una categoría…
+                    {categoriesLoading
+                      ? 'Cargando categorías…'
+                      : categoriesError
+                        ? 'No se pudieron cargar las categorías'
+                        : 'Selecciona una categoría…'}
                   </option>
-                  {CATEGORIES.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
                     </option>
                   ))}
                 </select>
               </div>
-              {errors.category && (
-                <p className="mt-1.5 text-xs text-red-500">{errors.category}</p>
+              {(errors.categoryId || categoriesError) && (
+                <p className="mt-1.5 text-xs text-red-500">
+                  {errors.categoryId ?? categoriesError}
+                </p>
               )}
             </div>
 
@@ -137,7 +146,7 @@ export const ProductForm: FC = () => {
                 htmlFor="product-barcode"
                 className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase"
               >
-                Código de Barra
+                SKU / Código de Barra
               </label>
               <div className="relative mt-2">
                 <span className="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-slate-400">
@@ -146,8 +155,8 @@ export const ProductForm: FC = () => {
                 <input
                   id="product-barcode"
                   type="text"
-                  name="barcode"
-                  value={form.barcode}
+                  name="sku"
+                  value={form.sku}
                   onChange={handleChange}
                   placeholder="Ej. 7501031311309"
                   className="w-full rounded-xl border border-slate-200 py-2.5 pr-4 pl-9 text-sm text-slate-800 placeholder:text-slate-400 focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-100 transition-colors"
@@ -299,8 +308,8 @@ export const ProductForm: FC = () => {
                 <input
                   id="product-initial-stock"
                   type="number"
-                  name="initialStock"
-                  value={form.initialStock}
+                  name="stock"
+                  value={form.stock}
                   onChange={handleChange}
                   placeholder="0"
                   min="0"
@@ -339,6 +348,15 @@ export const ProductForm: FC = () => {
           </div>
         </div>
 
+        {submitError && (
+          <div
+            role="alert"
+            className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600"
+          >
+            {submitError}
+          </div>
+        )}
+
         {/* ── Form actions ── */}
         <div className="flex items-center justify-end gap-3 pb-4">
           <button
@@ -354,10 +372,15 @@ export const ProductForm: FC = () => {
           <button
             type="submit"
             id="btn-create-product"
-            className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-[#5b35f5] px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#4c28e0] focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2"
+            disabled={submitting}
+            className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-[#5b35f5] px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#4c28e0] focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 disabled:cursor-wait disabled:opacity-70"
           >
-            <CheckCircle2 size={16} />
-            Crear Producto
+            {submitting ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              <CheckCircle2 size={16} />
+            )}
+            {submitting ? 'Creando…' : 'Crear Producto'}
           </button>
         </div>
       </form>

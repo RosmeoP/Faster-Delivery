@@ -1,19 +1,11 @@
 import { createContext, useContext, useState, type FC, type ReactNode } from 'react'
 import type { Product } from '../models/product'
 import { products as initialProducts } from '../data/products'
+import type { CreatedProduct } from '../service/productService'
 
 interface ProductsContextValue {
   products: Product[]
-  addProduct: (draft: {
-    name: string
-    category: string
-    description: string
-    regularPrice: string
-    salePrice: string
-    barcode: string
-    initialStock: string
-    minStock: string
-  }) => void
+  addProduct: (created: CreatedProduct) => void
 }
 
 const ProductsContext = createContext<ProductsContextValue | null>(null)
@@ -21,13 +13,13 @@ const ProductsContext = createContext<ProductsContextValue | null>(null)
 export const ProductsProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [products, setProducts] = useState<Product[]>(initialProducts)
 
-  const addProduct: ProductsContextValue['addProduct'] = (draft) => {
+  const addProduct: ProductsContextValue['addProduct'] = (created) => {
     const newProduct: Product = {
-      id: Date.now(),
-      name: draft.name,
-      category: draft.category,
-      description: draft.description,
-      price: Number(draft.regularPrice) || 0,
+      id: created.id,
+      name: created.name,
+      category: created.category.name,
+      description: created.description,
+      price: created.salePrice ?? created.regularPrice,
     }
 
     setProducts((prev) => [newProduct, ...prev])
