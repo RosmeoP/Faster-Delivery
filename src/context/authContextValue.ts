@@ -1,19 +1,9 @@
 import { createContext } from 'react'
-
-export interface LoginResponse {
-  token: string
-  user: {
-    firstName: string
-    lastName: string
-    email: string
-  }
-}
+import type { LoginResponse, User } from '../models/user'
 
 export interface AuthContextValue {
   token: string | null
-  nombre: string
-  apellido: string
-  email: string
+  user: User | null
   isAuthenticated: boolean
   login: (response: LoginResponse) => void
   logout: () => void

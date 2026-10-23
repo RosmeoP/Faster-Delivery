@@ -1,4 +1,4 @@
-import { useRegisterViewModel } from '../hooks/useRegisterViewModel'
+import { useRegisterViewModel } from '../viewmodels/useRegisterViewModel'
 
 interface RegisterViewProps {
   onNavigateToLogin: () => void

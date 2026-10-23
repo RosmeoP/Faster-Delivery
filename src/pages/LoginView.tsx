@@ -1,37 +1,24 @@
-import { useState } from 'react'
-import { useAuth } from '../hooks/useAuth'
-import { loginService } from '../services/loginService'
+import { useLoginViewModel } from '../viewmodels/useLoginViewModel'
 
 interface LoginViewProps {
   onNavigateToRegister: () => void
 }
 
 export default function LoginView({ onNavigateToRegister }: LoginViewProps) {
-  const { login } = useAuth()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [rememberMe, setRememberMe] = useState(false)
-  const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-
-  const handleLoginSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError('')
-
-    try {
-      const response = await loginService({ correo: email, contrasena: password })
-      login(response)
-    } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : 'No fue posible iniciar sesión.')
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    rememberMe,
+    setRememberMe,
+    error,
+    isLoading,
+    handleLoginSubmit,
+  } = useLoginViewModel()
 
   return (
     <div className="flex flex-col min-h-screen bg-white font-sans antialiased text-gray-900">
-      {/* Header Bar */}
       <header className="w-full bg-white py-6 px-8 sm:px-12">
         <div className="max-w-[1300px] mx-auto flex justify-between items-center">
           <div className="flex items-center gap-10">
@@ -66,7 +53,6 @@ export default function LoginView({ onNavigateToRegister }: LoginViewProps) {
         </div>
       </header>
 
-      {/* Login Main Area */}
       <main className="flex-1 flex justify-center items-center px-4 -mt-12">
         <div className="w-full max-w-[390px] flex flex-col items-center">
           <h1 className="text-[34px] font-extrabold text-black tracking-tight mb-1 text-center">

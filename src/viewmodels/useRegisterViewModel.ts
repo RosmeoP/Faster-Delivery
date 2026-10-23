@@ -1,19 +1,9 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react'
-import { registerService, type RegisterPayload } from '../services/registerService'
-
-type RegisterForm = RegisterPayload & { confirmarContrasena: string }
-
-const initialForm: RegisterForm = {
-  nombre: '',
-  apellido: '',
-  telefono: '',
-  correo: '',
-  contrasena: '',
-  confirmarContrasena: '',
-}
+import { emptyRegisterForm, registerFromForm } from '../models/register'
+import { registerService } from '../service/registerService'
 
 export function useRegisterViewModel() {
-  const [form, setForm] = useState<RegisterForm>(initialForm)
+  const [form, setForm] = useState(emptyRegisterForm)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
@@ -47,14 +37,7 @@ export function useRegisterViewModel() {
     try {
       setIsLoading(true)
       setError('')
-      const payload: RegisterPayload = {
-        nombre: form.nombre,
-        apellido: form.apellido,
-        telefono: form.telefono,
-        correo: form.correo,
-        contrasena: form.contrasena,
-      }
-      const response = await registerService(payload)
+      const response = await registerService(registerFromForm(form))
       console.log(response)
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : 'Ocurrió un error al registrar la cuenta.')
