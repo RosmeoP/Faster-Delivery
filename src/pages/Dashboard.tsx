@@ -1,11 +1,12 @@
 import type { FC } from 'react'
 import { useState } from 'react'
-import { User } from 'lucide-react'
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import { User as UserIcon } from 'lucide-react'
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import { CategoryManager } from '../components/CategoryManager'
 import { Drawer } from '../components/Drawer'
 import { ProductCard } from '../components/productCard'
 import { ProductForm } from '../components/ProductForm'
+import { UserProfile } from '../components/UserProfile'
 import { useProducts } from '../context/ProductsContext'
 import { useAuth } from '../core/useAuth'
 
@@ -17,6 +18,7 @@ const DashboardPage: FC = () => {
   const { logout, user } = useAuth()
   const { products } = useProducts()
   const navigate = useNavigate()
+  const location = useLocation()
 
   const displayName = [user?.nombre, user?.apellido].filter(Boolean).join(' ').toUpperCase()
   const visibleProducts =
@@ -26,6 +28,15 @@ const DashboardPage: FC = () => {
     setExtraCategories((current) => (current.includes(category.name) ? current : [...current, category.name]))
   }
 
+  const pageTitle =
+    location.pathname === '/profile'
+      ? 'Perfil de Usuario'
+      : location.pathname === '/products/create'
+        ? 'Crear Producto'
+        : categoryManagerOpen
+          ? 'Gestión de Categorías'
+          : 'Catalogo de productos'
+
   return (
     <div className="min-h-screen bg-[#f7f8fb]">
       <Drawer
@@ -33,10 +44,14 @@ const DashboardPage: FC = () => {
         onClose={() => setIsDrawerOpen(false)}
         activeFilter={activeFilter}
         extraCategories={extraCategories}
-        onOpenCategoryManager={() => setCategoryManagerOpen(true)}
+        onOpenCategoryManager={() => {
+          setCategoryManagerOpen(true)
+          navigate('/')
+        }}
         onSelectFilter={(label) => {
           setActiveFilter(label)
           setCategoryManagerOpen(false)
+          navigate('/')
         }}
         onNavigateToCreate={() => setCategoryManagerOpen(false)}
       />
@@ -62,20 +77,24 @@ const DashboardPage: FC = () => {
               </svg>
             </button>
             <h1 className="truncate text-[17px] font-semibold text-slate-900">
-              Catalogo de productos
+              {pageTitle}
             </h1>
           </div>
           <div className="flex items-center gap-3">
-            <label className="relative hidden sm:block">
-              <User size={15} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-slate-400" />
-              <input
-                type="search"
-                readOnly
-                value={displayName}
-                placeholder="Buscar"
-                className="h-10 w-72 rounded-lg border border-slate-200 bg-white pr-3 pl-9 text-xs font-medium tracking-wide text-slate-500 uppercase outline-none"
-              />
-            </label>
+            <button
+              type="button"
+              onClick={() => {
+                setCategoryManagerOpen(false)
+                navigate('/profile')
+              }}
+              title="Ver mi perfil"
+              className="flex cursor-pointer items-center gap-2.5 rounded-lg border border-slate-200 bg-white px-3.5 py-1.5 transition-colors hover:bg-slate-50"
+            >
+              <UserIcon size={18} strokeWidth={1.8} className="text-black" />
+              <span className="text-[13px] font-bold tracking-wide text-black uppercase">
+                {displayName || 'FERNANDO ALEXIS'}
+              </span>
+            </button>
             <button
               type="button"
               onClick={logout}
@@ -91,7 +110,10 @@ const DashboardPage: FC = () => {
             path="/"
             element={
               categoryManagerOpen ? (
-                <CategoryManager onCreate={handleCreateCategory} />
+                <CategoryManager
+                  onCreate={handleCreateCategory}
+                  onCancel={() => setCategoryManagerOpen(false)}
+                />
               ) : (
                 <section className="p-6">
                   <div className="mb-8">
@@ -120,6 +142,10 @@ const DashboardPage: FC = () => {
           <Route
             path="/products/create"
             element={<ProductForm />}
+          />
+          <Route
+            path="/profile"
+            element={<UserProfile />}
           />
         </Routes>
       </main>

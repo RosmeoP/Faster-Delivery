@@ -5,12 +5,15 @@ interface ProductCardProps {
   product: Product
 }
 
+const DEFAULT_IMAGE =
+  'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80'
+
 export const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <article className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
       <div className="relative">
         <img
-          src={product.image}
+          src={product.image || DEFAULT_IMAGE}
           alt={product.name}
           className="h-32 w-full object-cover"
         />

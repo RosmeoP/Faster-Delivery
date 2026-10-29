@@ -28,6 +28,13 @@ export function getCategories(): Promise<Category[]> {
   return apiRequest<Category[]>('/api/categories')
 }
 
+export function createCategory(payload: { name: string; description?: string }): Promise<Category> {
+  return apiRequest<Category>('/api/categories', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+}
+
 export function createProduct(payload: CreateProductPayload): Promise<CreatedProduct> {
   return apiRequest<CreatedProduct>('/api/products', {
     method: 'POST',

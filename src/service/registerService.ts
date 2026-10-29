@@ -8,6 +8,6 @@ export async function registerService(payload: Register) {
       body: JSON.stringify(payload),
     })
   } catch (error) {
-    throw new Error(error instanceof Error ? error.message : 'No fue posible crear la cuenta.')
+    throw new Error(error instanceof Error ? error.message : 'No fue posible crear la cuenta.', { cause: error })
   }
 }

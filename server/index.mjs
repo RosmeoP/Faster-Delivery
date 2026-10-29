@@ -40,7 +40,7 @@ function corsHeaders(request) {
   return {
     'Access-Control-Allow-Origin': isViteLocalOrigin ? origin : 'http://localhost:5173',
     'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, OPTIONS',
   }
 }
 
@@ -105,6 +105,36 @@ createServer(async (request, response) => {
           firstName: user.nombre,
           lastName: user.apellido,
           email: user.correo,
+          phone: user.telefono ?? '',
+        },
+      })
+      return
+    }
+
+    if (request.method === 'PUT' && request.url === '/api/user/profile') {
+      const email = body.correo
+      if (!email) {
+        sendJson(request, response, 400, { message: 'El correo es requerido.' })
+        return
+      }
+
+      let user = users.get(email)
+      if (!user) {
+        user = { id: randomUUID(), ...body }
+        users.set(email, user)
+      } else {
+        if (body.nombre !== undefined) user.nombre = body.nombre
+        if (body.apellido !== undefined) user.apellido = body.apellido
+        if (body.telefono !== undefined) user.telefono = body.telefono
+      }
+
+      sendJson(request, response, 200, {
+        message: 'Perfil actualizado correctamente.',
+        user: {
+          firstName: user.nombre,
+          lastName: user.apellido,
+          email: user.correo,
+          phone: user.telefono ?? '',
         },
       })
       return

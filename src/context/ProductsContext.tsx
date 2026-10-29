@@ -32,6 +32,7 @@ export const ProductsProvider: FC<{ children: ReactNode }> = ({ children }) => {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useProducts() {
   const ctx = useContext(ProductsContext)
   if (!ctx) throw new Error('useProducts debe usarse dentro de ProductsProvider')

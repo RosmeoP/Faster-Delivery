@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { createCategory } from '../service/productService'
 
 interface CategoryDraft {
   name: string
@@ -8,22 +9,38 @@ interface CategoryDraft {
 export function useCategoryViewModel(onCreate: (category: CategoryDraft) => void) {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const reset = () => {
     setName('')
     setDescription('')
+    setError(null)
   }
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const trimmedName = name.trim()
     if (!trimmedName) return
 
-    onCreate({
-      name: trimmedName,
-      description: description.trim(),
-    })
-    reset()
+    setIsSubmitting(true)
+    setError(null)
+
+    try {
+      await createCategory({
+        name: trimmedName,
+        description: description.trim(),
+      })
+    } catch {
+      // Local addition proceeds even if server is offline
+    } finally {
+      setIsSubmitting(false)
+      onCreate({
+        name: trimmedName,
+        description: description.trim(),
+      })
+      reset()
+    }
   }
 
   return {
@@ -31,6 +48,8 @@ export function useCategoryViewModel(onCreate: (category: CategoryDraft) => void
     setName,
     description,
     setDescription,
+    isSubmitting,
+    error,
     reset,
     handleSubmit,
   }

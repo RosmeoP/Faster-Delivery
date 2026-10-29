@@ -3,10 +3,15 @@ import { useCategoryViewModel } from '../viewmodels/useCategoryViewModel'
 
 interface CategoryManagerProps {
   onCreate: (category: { name: string; description: string }) => void
+  onCancel?: () => void
 }
 
-export const CategoryManager: FC<CategoryManagerProps> = ({ onCreate }) => {
-  const { name, setName, description, setDescription, reset, handleSubmit } = useCategoryViewModel(onCreate)
+export const CategoryManager: FC<CategoryManagerProps> = ({ onCreate, onCancel }) => {
+  const { name, setName, description, setDescription, isSubmitting, reset, handleSubmit } =
+    useCategoryViewModel((cat) => {
+      onCreate(cat)
+      onCancel?.()
+    })
 
   return (
     <section className="px-6 py-8 sm:px-8">
@@ -63,16 +68,20 @@ export const CategoryManager: FC<CategoryManagerProps> = ({ onCreate }) => {
         <div className="flex items-center justify-end gap-3 border-t border-slate-200 px-6 py-4">
           <button
             type="button"
-            onClick={reset}
+            onClick={() => {
+              reset()
+              onCancel?.()
+            }}
             className="cursor-pointer rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50"
           >
             Cancelar
           </button>
           <button
             type="submit"
-            className="cursor-pointer rounded-lg bg-[#5b35f5] px-4 py-2 text-sm font-semibold text-white hover:bg-[#4c28e0]"
+            disabled={isSubmitting}
+            className="cursor-pointer rounded-lg bg-[#5b35f5] px-4 py-2 text-sm font-semibold text-white hover:bg-[#4c28e0] disabled:opacity-70"
           >
-            Crear Categoria
+            {isSubmitting ? 'Creando…' : 'Crear Categoria'}
           </button>
         </div>
       </form>

@@ -16,6 +16,7 @@ export interface LoginResponse {
     firstName: string
     lastName: string
     email: string
+    phone?: string
   }
 }
 
@@ -24,5 +25,6 @@ export function userFromLoginResponse(response: LoginResponse): User {
     nombre: response.user.firstName,
     apellido: response.user.lastName,
     correo: response.user.email,
+    telefono: response.user.phone ?? '',
   }
 }

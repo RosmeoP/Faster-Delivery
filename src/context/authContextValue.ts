@@ -7,6 +7,7 @@ export interface AuthContextValue {
   isAuthenticated: boolean
   login: (response: LoginResponse) => void
   logout: () => void
+  updateUser: (updatedData: Partial<User>) => void
 }
 
 export const AuthContext = createContext<AuthContextValue | undefined>(undefined)

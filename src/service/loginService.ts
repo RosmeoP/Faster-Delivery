@@ -8,6 +8,6 @@ export async function loginService(credentials: LoginCredentials): Promise<Login
       body: JSON.stringify(credentials),
     })
   } catch (error) {
-    throw new Error(error instanceof Error ? error.message : 'No fue posible iniciar sesión.')
+    throw new Error(error instanceof Error ? error.message : 'No fue posible iniciar sesión.', { cause: error })
   }
 }
